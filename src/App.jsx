@@ -1,24 +1,31 @@
-import { useState } from 'react'
-import './App.css'
+import {
+  createBrowserRouter,
+  RouterProvider
+} from "react-router-dom"
+import Landing from './pages/landing/Landing';
+import NotFound from "./pages/error/NotFound";
 
-function App() {
-  const [count, setCount] = useState(0)
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Landing />,
+    errorElement: <NotFound />
+  },
+  {
+    path: "/onboarding",
+    element: <div>Implement Chat UI here!</div>,
+  },
+  {
+    path: "/mypage",
+    element: <div>Implement MyPage UI here!</div>,
+  }
+]);
 
+const App = () => {
   return (
-    <>
-      <h1>Vite + React</h1>
-      <div >
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p>
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className='md:w-[640px] h-dvh container mx-auto'>
+      <RouterProvider router={router} />
+    </div>
   )
 }
 
