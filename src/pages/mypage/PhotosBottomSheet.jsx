@@ -1,11 +1,15 @@
 import { motion, useAnimation } from "framer-motion";
-import { useEffect, useState, forwardRef } from "react";
+import { useEffect, useState, forwardRef, useCallback } from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
+import addPhotoIcon from "../../../static/add_photo.svg";
+
+import ImageUploadButton from "./ImageUploadButton";
 
 const PhotosBottomSheet = forwardRef(function PhotosBottomSheet({ badgesRef }, ref) {
     const controls = useAnimation();
     const [isDone, setIsDone] = useState(false);
+    const [selectedImages, setSelectedImages] = useState([]);
 
     const variants = {
         hidden: { y: '100%', opacity: 0 },
@@ -13,20 +17,27 @@ const PhotosBottomSheet = forwardRef(function PhotosBottomSheet({ badgesRef }, r
         done: () => ({ y: calculateDeltaYForDone(), borderRadius: '0' })
     };
 
+    const transitionToDone = useCallback(async () => {
+        await controls.start('done');
+        setIsDone(true);
+    }, [controls]);
+
+    useEffect(() => {
+        if (selectedImages.length > 0) {
+            transitionToDone();
+        }
+    }, [selectedImages, controls, transitionToDone]);
+
     useEffect(() => {
         controls.start('visible');
     }, [controls]);
+
 
     const calculateDeltaYForDone = () => {
         const sheetRect = ref.current.getBoundingClientRect();
         const badgesRect = badgesRef.current.getBoundingClientRect();
         return badgesRect.bottom - sheetRect.top;
     }
-
-    const transitionToDone = async () => {
-        await controls.start('done');
-        setIsDone(true);
-    };
 
     return (
         <>
@@ -47,16 +58,41 @@ const PhotosBottomSheet = forwardRef(function PhotosBottomSheet({ badgesRef }, r
                 }
             >
                 <div>
-                    <div className="flex justify-center">
-                        <div
-                            className="text-background-primary text-2xl font-semibold mt-10">
-                            나를 설명하는 사진이 있나요?
+                    {selectedImages.length == 0 && (
+                        <div className="flex flex-col justify-center items-center">
+                            <div
+                                className="text-background-primary text-2xl font-semibold mt-10 mb-4">
+                                나를 설명하는 사진이 있나요?
+                            </div>
+                            <ImageUploadButton onImagesSelected={setSelectedImages} imgClassName='opacity-90' />
                         </div>
-                    </div>
+                    )}
+                    {
+                        selectedImages.length > 0 && (
+                            <div className="py-10 px-6 ">
+                                <div className="relative">
+                                    <div className="flex overflow-x-auto space-x-4">
+                                        {selectedImages.map((photo, index) => (
+                                            <img
+                                                key={index}
+                                                src={URL.createObjectURL(photo)}
+                                                className="h-32 w-32 object-cover rounded-lg"
+                                            />
+                                        ))}
+                                    </div>
+                                    {/* <div className="absolute -right-[1px] w-16 -top-[1px] -bottom-[1px] bg-gradient-to-l from-[#C3D7EC] to-transparent">
+                                    </div> */}
+                                    <div className="absolute -top-2 -right-2">
+                                        <ImageUploadButton onImagesSelected={(moreFiles) => {
+                                            setSelectedImages([...selectedImages, ...moreFiles]);
+                                        }} imgClassName="h-8 bg-[#C9D9E9] p-1 rounded-full" />
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    }
+
                 </div>
-                <button onClick={transitionToDone} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
-                    Transition to Done
-                </button>
             </motion.div>
         </>
     );
@@ -65,5 +101,8 @@ const PhotosBottomSheet = forwardRef(function PhotosBottomSheet({ badgesRef }, r
 PhotosBottomSheet.propTypes = {
     badgesRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }).isRequired
 };
+
+
+
 
 export default PhotosBottomSheet;
