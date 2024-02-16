@@ -4,6 +4,7 @@ import {
 } from "react-router-dom"
 import Landing from './pages/landing/Landing';
 import NotFound from "./pages/error/NotFound";
+import MyPage from "./pages/mypage/MyPage";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +18,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/mypage",
-    element: <div>Implement MyPage UI here!</div>,
+    element: <MyPage />,
   }
 ]);
 
