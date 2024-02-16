@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import send from '../../../static/send.svg';
 
-const Input = ({stage, setStage, setInputs}) => {
+const Input = ({stage, setStage, setInputs, submit}) => {
     const [inputText, setInputText] = useState('');
 
     const onInputChanged = (e) => setInputText(e.target.value);
@@ -31,7 +31,7 @@ const Input = ({stage, setStage, setInputs}) => {
             placeHolder = '여자';
     }
 
-    const onSubmitted = () => {
+    const onAnswered= () => {
         switch(stage) {
             case 'NAME':
                 setStage('MAJOR');
@@ -92,17 +92,17 @@ const Input = ({stage, setStage, setInputs}) => {
                     value={inputText}
                 />
                 {isInputEmpty && (
-                <div className="right-[22px] top-[16px] absolute text-white text-[15px] font-medium font-['Pretendard']" onClick={onSubmitted}>패스할래요</div>
+                <div className="right-[22px] top-[16px] absolute text-white text-[15px] font-medium font-['Pretendard']" onClick={onAnswered}>패스할래요</div>
                 )}
                 {!isInputEmpty && (
-                <img src={send} className="right-[13px] top-[13px] absolute w-[24px] h-[24px]" alt="send" onClick={onSubmitted}/>)
+                <img src={send} className="right-[13px] top-[13px] absolute w-[24px] h-[24px]" alt="send" onClick={onAnswered}/>)
                 }
             </div>
             )}
             {stage === 'FINISH' && (
             <div className='flex justify-center'>
                 <div className="w-[100px] h-[42px] px-6 py-3 bg-slate-400 rounded-[20px] gap-2.5 inline-flex">
-                    <div className="text-white text-[15px] font-medium font-['Pretendard']">시작하기</div>
+                    <div className="text-white text-[15px] font-medium font-['Pretendard']" onClick={submit}>시작하기</div>
                 </div>
             </div>)
             }

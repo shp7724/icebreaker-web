@@ -2,27 +2,27 @@ import BotChatBox from "./BotChatBox";
 import MyChatBox from "./MyChatBox";
 import Input from "./Input";
 
-import React, { useState, useRef,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 
 const OnBoarding = () => {
+  const navigate = useNavigate();
   const [stage, setStage] = useState('NAME');
   const [inputs, setInputs] = useState({});
-  const scrollRef = useRef();
   const completedStages = Object.keys(inputs);
 
-  const scrollToBottom = () => {
-    if (scrollRef.current) {
-      window.scrollTo(0, document.body.scrollHeight);
-    }
-  };
-
   useEffect(() => {
-    console.log('useEffect');
-    scrollToBottom();
+    window.scrollTo(0, document.body.scrollHeight);
   }, [stage ]);
 
+  const submit = () => {
+    const data = JSON.stringify(inputs);
+    console.log(data); // FIXME: cache
+    navigate("/"); // FIXME: Home으로
+  };
+
   return (
-      <div className="w-full min-h-screen relative bg-slate-100 overflow-y-scroll" ref={scrollRef}>
+      <div className="w-full min-h-screen relative bg-slate-100 overflow-y-scroll">
         <div>
           <div className='h-[20px]'></div>
           <div className="mb-[12px]"> 
@@ -95,7 +95,7 @@ const OnBoarding = () => {
           )}
           <div className="h-[81px]"></div>
         </div>
-        <Input stage={stage} setStage={setStage} setInputs={setInputs}/>  
+        <Input stage={stage} setStage={setStage} setInputs={setInputs} submit={submit}/>  
       </div>
   )
 }
