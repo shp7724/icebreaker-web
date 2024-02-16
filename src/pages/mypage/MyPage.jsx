@@ -2,11 +2,14 @@ import InfoIce from "./InfoIce";
 import resetIcon from '../../../static/reset.svg';
 import myPageIcon from '../../../static/mypage.svg';
 import PhotosBottomSheet from "./PhotosBottomSheet";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import QRCodeBottomSheet from "./QRCodeBottomSheet";
 
 const MyPage = () => {
-    const badgesRef = useRef(null);
-    const photosBottomSheetRef = useRef(null);
+    const badgesRef = useRef();
+    const photosBottomSheetRef = useRef();
+    const [qrCodeUrl, setQrCodeUrl] = useState();
+
     return (
         <>
             <div className="px-8 py-5 flex items-center gap-1">
@@ -22,8 +25,13 @@ const MyPage = () => {
                 <button className="inline-flex items-center justify-center px-1 active:scale-90 transition-all active:bg-slate-200 rounded-2xl">
                     <img src={resetIcon} />
                 </button>
+                <button onClick={() => {
+                    setQrCodeUrl('https://developers.line.biz/assets/img/richmenu-template-guide-07.9ef1ba08.png')
+                }}>Set QR Code</button>
+
             </div>
             <PhotosBottomSheet badgesRef={badgesRef} ref={photosBottomSheetRef} />
+            <QRCodeBottomSheet qrCodeUrl={qrCodeUrl} />
         </>
     );
 }
