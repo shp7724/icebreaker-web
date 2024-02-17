@@ -2,6 +2,18 @@ import { Link } from 'react-router-dom';
 import logo from '../../../static/friend_circle.svg';
 
 const Landing = () => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const accessToken = Cookies.get('accessToken');
+
+        if (accessToken) {
+            navigate("/mypage");
+        } else {
+            navigate("/onboarding");
+        }
+    });
+
     return (
         <div className="flex flex-col items-center justify-center h-full text-center text-slate-400">
             <div className="text-base font-medium">
@@ -24,6 +36,7 @@ const Landing = () => {
                 </div>
                 <Link className="px-4 py-2 text-white bg-red-500 rounded-md" to="/onboarding">온보딩 페이지 가기</Link>
                 <Link className="px-4 py-2 text-white bg-red-500 rounded-md" to="/mypage">마이페이지 가기</Link>
+                <Link className="px-4 py-2 text-white bg-red-500 rounded-md" to="/loading">로딩 페이지 가기</Link>
                 <Link className="px-4 py-2 text-white bg-red-500 rounded-md" to="/result">결과 페이지 가기</Link>
             </div>
         </div>
