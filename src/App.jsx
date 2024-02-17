@@ -7,6 +7,7 @@ import NotFound from "./pages/error/NotFound";
 import MyPage from "./pages/mypage/MyPage";
 import ResultPage from "./pages/cards/ResultPage";
 import OnBoarding from "./pages/onboarding/OnBoarding";
+import LoadingPage from "./pages/loading/LoadingPage";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: '/result',
     element: <ResultPage />
+  },
+  {
+    path: "/loading",
+    element: <LoadingPage />
   }
 ]);
 
