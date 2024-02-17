@@ -4,10 +4,11 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import nextArrow from "../../../static/next_arrow.svg";
 import prevArrow from "../../../static/prev_arrow.svg";
-
+import baseURL from "../../baseUrl";
 import ImageUploadButton from "./ImageUploadButton";
+import Cookies from 'js-cookie';
 
-const PhotosBottomSheet = forwardRef(function PhotosBottomSheet({ badgesRef }, ref) {
+const PhotosBottomSheet = forwardRef(function PhotosBottomSheet({ badgesRef, handlePhotoUploadFinished }, ref) {
     const controls = useAnimation();
     const [isDone, setIsDone] = useState(false);
     const [selectedImages, setSelectedImages] = useState([]);
@@ -24,7 +25,36 @@ const PhotosBottomSheet = forwardRef(function PhotosBottomSheet({ badgesRef }, r
     const transitionToDone = useCallback(async () => {
         await controls.start('done');
         setIsDone(true);
-    }, [controls]);
+        await uploadSelectedImages(selectedImages, `${baseURL}/api/v1/upload`);
+        await handlePhotoUploadFinished();
+    }, [controls, selectedImages, handlePhotoUploadFinished]);
+
+    async function uploadSelectedImages(selectedImages, uploadUrl) {
+        const accessToken = Cookies.get('accessToken');
+        const formData = new FormData();
+        selectedImages.forEach((image, index) => {
+            formData.append(`files`, image);
+        });
+
+        try {
+            const response = await fetch(uploadUrl, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            return await response.json(); // Or handle the response as per your needs
+        } catch (error) {
+            console.error('Error uploading images:', error);
+        }
+    }
+
 
     useEffect(() => {
         if (selectedImages.length > 0) {

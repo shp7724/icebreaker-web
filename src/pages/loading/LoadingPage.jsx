@@ -1,8 +1,51 @@
 import Lottie from 'react-lottie';
 import animationData from "./loadingLottie"
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
+import { useLocation } from 'react-router-dom';
+import { navigate } from 'react-router-dom'
+import baseUrl from '../../baseUrl';
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+}
 
 const LoadingPage = () => {
+    const query = useQuery();
+    const meetUpId = query.get('meetUpId');
+
+    const [isFriendJoined, setIsFriendJoined] = useState(false)
+
+    useEffect(() => {
+        const accessToken = Cookies.get('accessToken');
+        if (!accessToken) {
+            navigate("/onboarding");
+            return;
+        }
+    }, []);
+
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            const accessToken = Cookies.get('accessToken');
+            const response = await fetch(
+                `${baseUrl}/api/v1/meet/meet`,
+                {
+                    headers: { 'Authorization': `Bearer ${accessToken}` },
+                }
+            );
+
+            if (response && response.status === 200) {
+                if (response.headers.get('content-length') === '0' || !response.body) {
+                    // Handle empty response body
+                    setIsFriendJoined(false);
+                } else {
+                    setIsFriendJoined(true);
+                    clearInterval(interval);
+                }
+            }
+        }, 500);
+        return () => clearInterval(interval);
+    }, [meetUpId]);
+
     const lottieRef = useRef(null);
 
     const defaultOptions = {
