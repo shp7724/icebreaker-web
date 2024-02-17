@@ -2,14 +2,44 @@ import InfoIce from "./InfoIce";
 import resetIcon from '../../../static/reset.svg';
 import myPageIcon from '../../../static/mypage.svg';
 import PhotosBottomSheet from "./PhotosBottomSheet";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import QRCodeBottomSheet from "./QRCodeBottomSheet";
+import Cookies from 'js-cookie';
 
 const MyPage = () => {
     const badgesRef = useRef();
     const photosBottomSheetRef = useRef();
     const [qrCodeUrl, setQrCodeUrl] = useState();
 
+    useEffect(() => { 
+        const accessToken = Cookies.get('accessToken');
+
+        if(!accessToken) {
+            navigate("/onboarding");
+            return;
+        }
+
+        const response =
+        fetch(
+            'https://icebreaker.wafflestudio.com/api/v1/user/me',
+            {
+                headers: { 'Authorization': `Bearer ${accessToken}` },
+            }
+        )
+            .then((response) => {
+                if (response.status === 200) {
+                    return response.json();
+                } else {
+                    return;
+                }
+            })
+            .then((responseJson) => {
+                if(responseJson) {
+                    console.log(responseJson);
+                }
+            });
+    });
+    
     return (
         <>
             <div className="px-8 py-5 flex items-center gap-1">
@@ -31,7 +61,9 @@ const MyPage = () => {
 
             </div>
             <PhotosBottomSheet badgesRef={badgesRef} ref={photosBottomSheetRef} />
-            <QRCodeBottomSheet qrCodeUrl={qrCodeUrl} />
+            {qrCodeUrl && (
+                <QRCodeBottomSheet qrCodeUrl={qrCodeUrl} />
+            )}
         </>
     );
 }

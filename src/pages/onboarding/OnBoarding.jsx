@@ -1,7 +1,7 @@
 import BotChatBox from "./BotChatBox";
 import MyChatBox from "./MyChatBox";
 import Input from "./Input";
-
+import Cookies from 'js-cookie';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 
@@ -15,10 +15,31 @@ const OnBoarding = () => {
     window.scrollTo(0, document.body.scrollHeight);
   }, [stage ]);
 
-  const submit = () => {
+  const submit = async () => {
     const data = JSON.stringify(inputs);
     console.log(data); // FIXME: cache
-    navigate("/"); // FIXME: Home으로
+    
+    const response = fetch(
+      'https://icebreaker.wafflestudio.com/api/v1/user/basicInformation',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          'name' : inputs['NAME'],
+          'birthDay' : inputs['BIRTHDATE'],
+          'gender' : inputs['SEX'],
+          'mbti' : inputs['MBTI'],
+          'major': inputs['MAJOR'],
+          'location': inputs['LOCATION'],
+        })
+      }
+    )
+
+    if(response && response.status === 200) {
+      const responseJson = await (await response).json();
+      Cookies.set('accessToken', responseJson['loginToken']);
+      navigate('/mypage');
+    }
   };
 
   return (
