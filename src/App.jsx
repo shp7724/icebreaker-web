@@ -5,6 +5,7 @@ import {
 import Landing from './pages/landing/Landing';
 import NotFound from "./pages/error/NotFound";
 import MyPage from "./pages/mypage/MyPage";
+import ResultPage from "./pages/cards/ResultPage";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: "/mypage",
     element: <MyPage />,
+  },
+  {
+    path: '/result',
+    element: <ResultPage />
   }
 ]);
 

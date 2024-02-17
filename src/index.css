@@ -8,4 +8,12 @@
     --tw-shadow: 3px 3px var(--tw-shadow-color);
     box-shadow: var(--tw-shadow);
   }
+
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+
+  .rotate-y-0 {
+    transform: rotateY(0deg);
+  }
 }
