@@ -1,5 +1,5 @@
 import { motion, useAnimation } from "framer-motion";
-import { useEffect, useState, forwardRef, useCallback } from "react";
+import { useEffect, useState, forwardRef, useCallback, useRef } from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
 
@@ -9,6 +9,9 @@ const PhotosBottomSheet = forwardRef(function PhotosBottomSheet({ badgesRef }, r
     const controls = useAnimation();
     const [isDone, setIsDone] = useState(false);
     const [selectedImages, setSelectedImages] = useState([]);
+    const scrollViewRef = useRef();
+    const [scrollPosition, setScrollPosition] = useState(0);
+    const [isOverflown, setIsOverflown] = useState(false);
 
     const variants = {
         hidden: { y: '100%', opacity: 0 },
@@ -25,7 +28,7 @@ const PhotosBottomSheet = forwardRef(function PhotosBottomSheet({ badgesRef }, r
         if (selectedImages.length > 0) {
             const timeout = setTimeout(() => {
                 transitionToDone();
-            }, 500);
+            }, 200);
             return () => clearTimeout(timeout);
         }
     }, [selectedImages, controls, transitionToDone]);
@@ -34,12 +37,53 @@ const PhotosBottomSheet = forwardRef(function PhotosBottomSheet({ badgesRef }, r
         controls.start('visible');
     }, [controls]);
 
-
     const calculateDeltaYForDone = () => {
         const sheetRect = ref.current.getBoundingClientRect();
         const badgesRect = badgesRef.current.getBoundingClientRect();
         return badgesRect.bottom - sheetRect.top;
     }
+
+    useEffect(() => {
+        if (!scrollViewRef.current) {
+            return;
+        }
+
+        const checkScrollPosition = () => {
+            const { scrollLeft, scrollWidth, clientWidth } = scrollViewRef.current;
+            setIsOverflown(scrollWidth > clientWidth);
+            if (scrollLeft === 0) {
+                setScrollPosition(0);
+                // Trigger notification for left edge
+            } else if (scrollLeft + clientWidth === scrollWidth) {
+                setScrollPosition(1);
+                // Trigger notification for right edge
+            } else {
+                setScrollPosition(-1);
+            }
+        };
+
+        const currentRef = scrollViewRef.current;
+        currentRef.addEventListener('scroll', checkScrollPosition);
+
+        return () => {
+            currentRef.removeEventListener('scroll', checkScrollPosition);
+        };
+    }, [scrollViewRef, selectedImages]);
+
+    const shouldHideLeftGradient = useCallback(() => {
+        console.log(scrollPosition, isOverflown);
+        if (isOverflown && scrollPosition === -1) {
+            return false;
+        }
+        return scrollPosition === 0;
+    }, [scrollPosition, isOverflown]);
+
+    const shouldHideRightGradient = useCallback(() => {
+        if (isOverflown && scrollPosition === -1) {
+            return false;
+        }
+        return scrollPosition === 1;
+    }, [scrollPosition, isOverflown]);
 
     return (
         <>
@@ -73,16 +117,22 @@ const PhotosBottomSheet = forwardRef(function PhotosBottomSheet({ badgesRef }, r
                         selectedImages.length > 0 && (
                             <div className="py-10 ">
                                 <div className="relative">
-                                    <div className="flex overflow-x-auto gap-x-4">
-                                        {selectedImages.map((photo, index) => (
-                                            <img
-                                                key={index}
-                                                src={URL.createObjectURL(photo)}
-                                                className="h-32 w-32 object-cover rounded-lg first:ml-6 last:mr-6"
-                                            />
-                                        ))}
+                                    <div className={classNames("overflow-scroll-gradient",
+                                        {
+                                            'overflow-scroll-gradient-before-hidden': shouldHideLeftGradient(),
+                                            'overflow-scroll-gradient-after-hidden': shouldHideRightGradient(),
+                                        })}>
+                                        <div ref={scrollViewRef} className="flex overflow-x-auto gap-x-4 mx-8">
+                                            {selectedImages.map((photo, index) => (
+                                                <img
+                                                    key={index}
+                                                    src={URL.createObjectURL(photo)}
+                                                    className="h-32 w-32 object-cover rounded-lg"
+                                                />
+                                            ))}
+                                        </div>
                                     </div>
-                                    <div className="absolute -top-3 right-3">
+                                    <div className="absolute -top-3 right-6">
                                         <ImageUploadButton onImagesSelected={(moreFiles) => {
                                             setSelectedImages([...selectedImages, ...moreFiles]);
                                         }} imgClassName="h-8 bg-[#C9D9E9] p-1 rounded-full" />
@@ -91,7 +141,6 @@ const PhotosBottomSheet = forwardRef(function PhotosBottomSheet({ badgesRef }, r
                             </div>
                         )
                     }
-
                 </div>
             </motion.div>
         </>

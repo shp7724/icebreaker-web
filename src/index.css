@@ -16,4 +16,47 @@
   .rotate-y-0 {
     transform: rotateY(0deg);
   }
+
+  .overflow-scroll-gradient {
+    position: relative;
+  }
+
+  .overflow-scroll-gradient::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 31px;
+    width: 2rem;
+    height: 101%;
+    background: linear-gradient(
+      to right,
+      rgba(211, 221, 232, 1),
+      rgba(211, 221, 232, 0)
+    );
+    transition: opacity 0.2s;
+  }
+
+  .overflow-scroll-gradient::after {
+    content: "";
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    right: 31px;
+    width: 2rem;
+    height: 101%;
+    background: linear-gradient(
+      to left,
+      rgba(211, 221, 232, 1),
+      rgba(211, 221, 232, 0)
+    );
+    transition: opacity 0.2s;
+  }
+
+  .overflow-scroll-gradient-before-hidden:before {
+    opacity: 0;
+  }
+
+  .overflow-scroll-gradient-after-hidden:after {
+    opacity: 0;
+  }
 }
