@@ -19,7 +19,7 @@ const OnBoarding = () => {
     const data = JSON.stringify(inputs);
     console.log(data); // FIXME: cache
     
-    const response = fetch(
+    const response = await fetch(
       'https://icebreaker.wafflestudio.com/api/v1/user/basicInformation',
       {
         method: 'POST',
@@ -36,7 +36,7 @@ const OnBoarding = () => {
     )
 
     if(response && response.status === 200) {
-      const responseJson = await (await response).json();
+      const responseJson = await response.json();
       Cookies.set('accessToken', responseJson['loginToken']);
       navigate('/mypage');
     }

@@ -5,39 +5,39 @@ import PhotosBottomSheet from "./PhotosBottomSheet";
 import { useRef, useState, useEffect } from "react";
 import QRCodeBottomSheet from "./QRCodeBottomSheet";
 import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
+
 
 const MyPage = () => {
     const badgesRef = useRef();
     const photosBottomSheetRef = useRef();
     const [qrCodeUrl, setQrCodeUrl] = useState();
+    const navigate = useNavigate();
+    const [informations, setInformtaions] = useState([]); 
 
     useEffect(() => { 
-        const accessToken = Cookies.get('accessToken');
+        async function fetchData() {
+            const accessToken = Cookies.get('accessToken');
 
-        if(!accessToken) {
-            navigate("/onboarding");
-            return;
+            if(!accessToken) {
+                navigate("/onboarding");
+                return;
+            }
+    
+            const response = await fetch(
+                'https://icebreaker.wafflestudio.com/api/v1/user/me',
+                {
+                    headers: { 'Authorization': `Bearer ${accessToken}` },
+                }
+            )
+    
+            if (response && response.status === 200) {
+                const responseJson = await response.json();
+                setInformtaions(responseJson['information']);
+            }
         }
 
-        const response =
-        fetch(
-            'https://icebreaker.wafflestudio.com/api/v1/user/me',
-            {
-                headers: { 'Authorization': `Bearer ${accessToken}` },
-            }
-        )
-            .then((response) => {
-                if (response.status === 200) {
-                    return response.json();
-                } else {
-                    return;
-                }
-            })
-            .then((responseJson) => {
-                if(responseJson) {
-                    console.log(responseJson);
-                }
-            });
+        fetchData();    
     });
     
     return (
@@ -48,9 +48,12 @@ const MyPage = () => {
             </div>
             <div ref={badgesRef} className="flex flex-wrap px-8 gap-3 pb-8">
                 {
-                    ['김와플', '컴퓨터공학부', 'INFP', '김와플', '컴퓨터공학부', 'INFP', '김와플', '컴퓨터공학부', 'INFP'].map((text, index) => (
-                        <InfoIce key={index} text={text} />
+                    informations.map((info, index) => (
+                        <InfoIce key={index} type={info.type} text={info.value} />
                     ))
+                    // ['김와플', '컴퓨터공학부', 'INFP', '김와플', '컴퓨터공학부', 'INFP', '김와플', '컴퓨터공학부', 'INFP'].map((text, index) => (
+                    //     <InfoIce key={index} text={text} />
+                    // ))
                 }
                 <button className="inline-flex items-center justify-center px-1 active:scale-90 transition-all active:bg-slate-200 rounded-2xl">
                     <img src={resetIcon} />

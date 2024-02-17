@@ -2,8 +2,13 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+import star from '../../../static/star.svg'
+
+
 const transition = { type: 'spring', stiffness: 140, damping: 15 };
-const rotateDegrees = [7, 0, -7, 5, -5];
+const rotateDegrees = [7, -7, 0, 5, -5];
+
+
 const FlippableCard = ({ index, zIndex, handleDragEnd, card }) => {
     const [isFlipped, setIsFlipped] = useState(false);
 
@@ -28,17 +33,32 @@ const FlippableCard = ({ index, zIndex, handleDragEnd, card }) => {
             style={{ zIndex: zIndex }}
         >
             <motion.div
-                className="w-[281px] h-[392px] relative text-white flex justify-center items-center cursor-pointer"
+                className="w-[281px] h-[420px] relative text-white flex justify-center items-center cursor-pointer"
                 onTap={flipCard}
-                animate={{ rotateY: isFlipped ? 180 : 0, scale: isFlipped ? 1.4 : 1 }}
+                animate={{ rotateY: isFlipped ? 180 : 0, scale: isFlipped ? 1.2 : 1 }}
                 transition={transition}
                 style={{ transformStyle: 'preserve-3d' }}
             >
-                <CardSide className='rotate-y-0 overflow-hidden'>
-                    <img src={card.coverImg} />
+                <CardSide className='rotate-y-0 overflow-hidden bg-[#5C739B]'>
+                    <img src={card.coverImg} draggable="false" />
+                    <div className='text-center font-gowun -mt-2 text-sm'>
+                        {card.title}
+                    </div>
                 </CardSide>
                 <CardSide className='rotate-y-180 overflow-hidden' >
                     <div className='bg-[#5C739B] w-full h-full'>
+                        <div className='flex flex-col text-center items-center justify-center h-full'>
+                            {/* 카드 설명 */}
+                            <img src={star}></img>
+                            <div className='font-gowun text-[#CBD5E1] px-10 break-keep text-xs my-2'>
+                                {card.cardDescription}
+                            </div>
+                            <img src={star}></img>
+                            {/* 질문 */}
+                            <div className='font-gowun text-sm px-12 break-keep mt-10'>
+                                {card.question}
+                            </div>
+                        </div>
                     </div>
                 </CardSide>
             </motion.div>

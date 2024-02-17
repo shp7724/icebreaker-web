@@ -40,6 +40,7 @@ const Landing = () => {
                 </div>
                 <Link className="px-4 py-2 text-white bg-red-500 rounded-md" to="/onboarding">온보딩 페이지 가기</Link>
                 <Link className="px-4 py-2 text-white bg-red-500 rounded-md" to="/mypage">마이페이지 가기</Link>
+                <Link className="px-4 py-2 text-white bg-red-500 rounded-md" to="/loading">로딩 페이지 가기</Link>
                 <Link className="px-4 py-2 text-white bg-red-500 rounded-md" to="/result">결과 페이지 가기</Link>
             </div>
         </div>
