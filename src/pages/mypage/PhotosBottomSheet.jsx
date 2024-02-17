@@ -2,6 +2,8 @@ import { motion, useAnimation } from "framer-motion";
 import { useEffect, useState, forwardRef, useCallback, useRef } from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
+import nextArrow from "../../../static/next_arrow.svg";
+import prevArrow from "../../../static/prev_arrow.svg";
 
 import ImageUploadButton from "./ImageUploadButton";
 
@@ -53,10 +55,8 @@ const PhotosBottomSheet = forwardRef(function PhotosBottomSheet({ badgesRef }, r
             setIsOverflown(scrollWidth > clientWidth);
             if (scrollLeft === 0) {
                 setScrollPosition(0);
-                // Trigger notification for left edge
             } else if (scrollLeft + clientWidth === scrollWidth) {
                 setScrollPosition(1);
-                // Trigger notification for right edge
             } else {
                 setScrollPosition(-1);
             }
@@ -132,10 +132,23 @@ const PhotosBottomSheet = forwardRef(function PhotosBottomSheet({ badgesRef }, r
                                             ))}
                                         </div>
                                     </div>
+                                    {!shouldHideRightGradient() && (
+                                        <div className="absolute top-12 right-5  ">
+                                            <img src={nextArrow} alt="다음" className="" />
+                                        </div>
+                                    )}
+                                    {!shouldHideLeftGradient() && (
+                                        <div className="absolute top-12 left-5 ">
+                                            <img src={prevArrow
+                                            } alt="이전" className="" />
+                                        </div>
+                                    )}
                                     <div className="absolute -top-3 right-6">
-                                        <ImageUploadButton onImagesSelected={(moreFiles) => {
-                                            setSelectedImages([...selectedImages, ...moreFiles]);
-                                        }} imgClassName="h-8 bg-[#C9D9E9] p-1 rounded-full" />
+                                        <div className="flex flex-col gap-y-5">
+                                            <ImageUploadButton onImagesSelected={(moreFiles) => {
+                                                setSelectedImages([...selectedImages, ...moreFiles]);
+                                            }} imgClassName="h-8 bg-[#C9D9E9]/50 backdrop-blur-md p-1 rounded-full shadow-sm" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
