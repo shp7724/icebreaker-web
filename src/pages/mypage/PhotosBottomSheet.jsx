@@ -2,7 +2,6 @@ import { motion, useAnimation } from "framer-motion";
 import { useEffect, useState, forwardRef, useCallback } from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
-import addPhotoIcon from "../../../static/add_photo.svg";
 
 import ImageUploadButton from "./ImageUploadButton";
 
@@ -24,7 +23,10 @@ const PhotosBottomSheet = forwardRef(function PhotosBottomSheet({ badgesRef }, r
 
     useEffect(() => {
         if (selectedImages.length > 0) {
-            transitionToDone();
+            const timeout = setTimeout(() => {
+                transitionToDone();
+            }, 500);
+            return () => clearTimeout(timeout);
         }
     }, [selectedImages, controls, transitionToDone]);
 
@@ -69,20 +71,18 @@ const PhotosBottomSheet = forwardRef(function PhotosBottomSheet({ badgesRef }, r
                     )}
                     {
                         selectedImages.length > 0 && (
-                            <div className="py-10 px-6 ">
+                            <div className="py-10 ">
                                 <div className="relative">
-                                    <div className="flex overflow-x-auto space-x-4">
+                                    <div className="flex overflow-x-auto gap-x-4">
                                         {selectedImages.map((photo, index) => (
                                             <img
                                                 key={index}
                                                 src={URL.createObjectURL(photo)}
-                                                className="h-32 w-32 object-cover rounded-lg"
+                                                className="h-32 w-32 object-cover rounded-lg first:ml-6 last:mr-6"
                                             />
                                         ))}
                                     </div>
-                                    {/* <div className="absolute -right-[1px] w-16 -top-[1px] -bottom-[1px] bg-gradient-to-l from-[#C3D7EC] to-transparent">
-                                    </div> */}
-                                    <div className="absolute -top-2 -right-2">
+                                    <div className="absolute -top-3 right-3">
                                         <ImageUploadButton onImagesSelected={(moreFiles) => {
                                             setSelectedImages([...selectedImages, ...moreFiles]);
                                         }} imgClassName="h-8 bg-[#C9D9E9] p-1 rounded-full" />
