@@ -16,7 +16,7 @@ const ResultPage = () => {
     }
 
     return (
-        <div className='flex justify-center items-center flex-col h-full'>
+        <div className='flex justify-center items-center flex-col h-full select-none'>
             <div className='text-slate-500 font-semibold mb-16 text-xl'>
                 두 분의 친구 카드가 도착했어요
             </div>

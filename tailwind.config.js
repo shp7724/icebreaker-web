@@ -6,6 +6,9 @@ export default {
       colors: {
         "background-primary": "#E4EEF7",
       },
+      fontFamily: {
+        gowun: ["GowunDodum-Regular", "sans-serif"],
+      },
     },
   },
   plugins: [],

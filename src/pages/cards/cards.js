@@ -22,23 +22,29 @@ import card20 from "../../../static/tarot/card20.svg";
 const dummyCards = [
   {
     id: 1,
-    title: "Card 1",
-    question: "Description 1",
-    cardDescription: "Card Description 1",
+    title: "#동갑 #초등학교 #애니메이션",
+    question:
+      "우리 동갑이네! 초등학교 때 가장 감명 깊게 본 애니메이션이 뭐였어?",
+    cardDescription:
+      "기하학적 패턴 안의 버섯은 실제적이면서도 마법 같은 성장을 의미하며, 전통, 과거로부터의 학습, 자연의 기반 효과를 상징합니다.",
     coverImg: card1,
   },
   {
     id: 2,
-    title: "Card 2",
-    question: "Description 2",
-    cardDescription: "Card Description 2",
+    title: "#동갑 #초등학교 #애니메이션",
+    question:
+      "우리 동갑이네! 초등학교 때 가장 감명 깊게 본 애니메이션이 뭐였어?",
+    cardDescription:
+      "기하학적 패턴 안의 버섯은 실제적이면서도 마법 같은 성장을 의미하며, 전통, 과거로부터의 학습, 자연의 기반 효과를 상징합니다.",
     coverImg: card2,
   },
   {
     id: 3,
-    title: "Card 3",
-    question: "Description 3",
-    cardDescription: "Card Description 3",
+    title: "#동갑 #초등학교 #애니메이션",
+    question:
+      "우리 동갑이네! 초등학교 때 가장 감명 깊게 본 애니메이션이 뭐였어?",
+    cardDescription:
+      "기하학적 패턴 안의 버섯은 실제적이면서도 마법 같은 성장을 의미하며, 전통, 과거로부터의 학습, 자연의 기반 효과를 상징합니다.",
     coverImg: card3,
   },
 ];
