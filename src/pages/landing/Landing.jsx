@@ -1,7 +1,23 @@
 import { Link } from 'react-router-dom';
 import logo from '../../../static/friend_circle.svg';
+import React, { useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
+
 
 const Landing = () => {
+    const navigate = useNavigate();
+
+    useEffect(() => { 
+        const accessToken = Cookies.get('accessToken');
+
+        if(accessToken) {
+            navigate("/mypage");
+        } else {
+            navigate("/onboarding");
+        }
+    });
+
     return (
         <div className="flex flex-col items-center justify-center h-full text-center text-slate-400">
             <div className="text-base font-medium">

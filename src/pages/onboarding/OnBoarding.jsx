@@ -1,7 +1,7 @@
 import BotChatBox from "./BotChatBox";
 import MyChatBox from "./MyChatBox";
 import Input from "./Input";
-
+import Cookies from 'js-cookie';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 
@@ -18,7 +18,22 @@ const OnBoarding = () => {
   const submit = () => {
     const data = JSON.stringify(inputs);
     console.log(data); // FIXME: cache
-    navigate("/"); // FIXME: Home으로
+    fetch(
+      'https://icebreaker.wafflestudio.com/login',
+      {
+        method: 'POST',
+        headers: { 'Authorization': 'application/json' },
+        body: JSON.stringify({ title: 'React POST Request Example' })
+      }
+    )
+      .then((response) => {
+        if (response.status !== 200) {
+          return;
+        } 
+
+        Cookies.set('accessToken', response.json('accessToken'));
+        navigate('/mypage');
+      });
   };
 
   return (

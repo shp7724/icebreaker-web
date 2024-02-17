@@ -81,7 +81,7 @@ const Input = ({stage, setStage, setInputs, submit}) => {
     }
 
     return (
-        <div className="md:w-[640px] h-[50px] ml-[24px] mr-[24px] mb-[15px] fixed bottom-0">
+        <div className="md:w-[592px] h-[50px] ml-[24px] mb-[15px] fixed bottom-0">
             {stage !== 'FINISH' && (
             <div>
                 <input

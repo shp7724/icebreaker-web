@@ -2,7 +2,7 @@ import InfoIce from "./InfoIce";
 import resetIcon from '../../../static/reset.svg';
 import myPageIcon from '../../../static/mypage.svg';
 import PhotosBottomSheet from "./PhotosBottomSheet";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import QRCodeBottomSheet from "./QRCodeBottomSheet";
 
 const MyPage = () => {
@@ -10,6 +10,29 @@ const MyPage = () => {
     const photosBottomSheetRef = useRef();
     const [qrCodeUrl, setQrCodeUrl] = useState();
 
+    useEffect(() => { 
+        const accessToken = Cookies.get('accessToken');
+
+        if(!accessToken) {
+            navigate("/onboarding");
+            return;
+        }
+
+        fetch(
+            'https://icebreaker.wafflestudio.com/api/v1/users/me',
+            {
+                headers: { 'Authorization': `Bearer ${accessToken}` },
+            }
+        )
+            .then((response) => {
+                if (response.status !== 200) {
+                    return;
+                } 
+
+                console.log(response.json());
+            })
+    });
+    
     return (
         <>
             <div className="px-8 py-5 flex items-center gap-1">
