@@ -1,3 +1,62 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .ice-shadow {
+    --tw-shadow-color: rgba(135, 159, 194, 0.48);
+    --tw-shadow: 3px 3px var(--tw-shadow-color);
+    box-shadow: var(--tw-shadow);
+  }
+
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+
+  .rotate-y-0 {
+    transform: rotateY(0deg);
+  }
+
+  .overflow-scroll-gradient {
+    position: relative;
+  }
+
+  .overflow-scroll-gradient::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 31px;
+    width: 2rem;
+    height: 101%;
+    background: linear-gradient(
+      to right,
+      rgba(211, 221, 232, 1),
+      rgba(211, 221, 232, 0)
+    );
+    transition: opacity 0.2s;
+  }
+
+  .overflow-scroll-gradient::after {
+    content: "";
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    right: 31px;
+    width: 2rem;
+    height: 101%;
+    background: linear-gradient(
+      to left,
+      rgba(211, 221, 232, 1),
+      rgba(211, 221, 232, 0)
+    );
+    transition: opacity 0.2s;
+  }
+
+  .overflow-scroll-gradient-before-hidden:before {
+    opacity: 0;
+  }
+
+  .overflow-scroll-gradient-after-hidden:after {
+    opacity: 0;
+  }
+}
