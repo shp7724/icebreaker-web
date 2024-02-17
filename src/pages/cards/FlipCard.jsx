@@ -11,21 +11,26 @@ const FlippableCard = ({ index, zIndex, handleDragEnd }) => {
         setIsFlipped(!isFlipped);
     };
 
+    const onDragEnd = () => {
+        setIsFlipped(false);
+        handleDragEnd(index);
+    }
 
     return (
         <motion.div
             id={`flippable-card-${index}-${zIndex}`}
             className={classNames('flex justify-center')}
             drag
-            onDragEnd={() => handleDragEnd(index)}
+            onDragEnd={onDragEnd}
             dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
             dragElastic={1}
-            style={{ rotate: rotateDegrees[index % rotateDegrees.length], zIndex: zIndex }}
+            animate={{ rotate: isFlipped ? 0 : rotateDegrees[index % rotateDegrees.length] }}
+            style={{ zIndex: zIndex }}
         >
             <motion.div
                 className="w-64 h-64 relative text-white flex justify-center items-center cursor-pointer"
                 onTap={flipCard}
-                animate={{ rotateY: isFlipped ? 180 : 0 }}
+                animate={{ rotateY: isFlipped ? 180 : 0, scale: isFlipped ? 1.4 : 1 }}
                 transition={transition}
                 style={{ transformStyle: 'preserve-3d' }}
             >

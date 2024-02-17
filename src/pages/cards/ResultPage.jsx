@@ -1,7 +1,7 @@
 
 import logo from '../../../static/friend_circle.svg';
 import FlippableCard from './FlipCard';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const ResultPage = () => {
     const [cards, setCards] = useState([
