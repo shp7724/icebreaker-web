@@ -2,8 +2,12 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
+
+
 const transition = { type: 'spring', stiffness: 140, damping: 15 };
 const rotateDegrees = [7, 0, -7, 5, -5];
+
+
 const FlippableCard = ({ index, zIndex, handleDragEnd, card }) => {
     const [isFlipped, setIsFlipped] = useState(false);
 
@@ -30,12 +34,12 @@ const FlippableCard = ({ index, zIndex, handleDragEnd, card }) => {
             <motion.div
                 className="w-[281px] h-[392px] relative text-white flex justify-center items-center cursor-pointer"
                 onTap={flipCard}
-                animate={{ rotateY: isFlipped ? 180 : 0, scale: isFlipped ? 1.4 : 1 }}
+                animate={{ rotateY: isFlipped ? 180 : 0, scale: isFlipped ? 1.2 : 1 }}
                 transition={transition}
                 style={{ transformStyle: 'preserve-3d' }}
             >
                 <CardSide className='rotate-y-0 overflow-hidden'>
-                    <img src={card.coverImg} />
+                    <img src={card.coverImg} draggable="false" />
                 </CardSide>
                 <CardSide className='rotate-y-180 overflow-hidden' >
                     <div className='bg-[#5C739B] w-full h-full'>
