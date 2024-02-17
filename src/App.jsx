@@ -6,6 +6,7 @@ import Landing from './pages/landing/Landing';
 import NotFound from "./pages/error/NotFound";
 import MyPage from "./pages/mypage/MyPage";
 import ResultPage from "./pages/cards/ResultPage";
+import OnBoarding from "./pages/onboarding/OnBoarding";
 
 const router = createBrowserRouter([
   {
@@ -15,7 +16,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/onboarding",
-    element: <div>Implement Chat UI here!</div>,
+    element: <OnBoarding />
   },
   {
     path: "/mypage",
