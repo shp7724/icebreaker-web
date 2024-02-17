@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import star from '../../../static/star.svg'
+import allCardsCover, { allCardsDescriptions } from './cards';
 
 
 const transition = { type: 'spring', stiffness: 140, damping: 15 };
@@ -20,6 +21,13 @@ const FlippableCard = ({ index, zIndex, handleDragEnd, card }) => {
         setIsFlipped(false);
         handleDragEnd(index);
     }
+
+    const coverImg = allCardsCover[card.cardNo];
+    const question = card.question;
+    const cardDescription = allCardsDescriptions[card.cardNo];
+    const keywordsString = card.keywords.map((keyword, index) => {
+        return `#${keyword}`;
+    }).join(' ');
 
     return (
         <motion.div
@@ -40,9 +48,9 @@ const FlippableCard = ({ index, zIndex, handleDragEnd, card }) => {
                 style={{ transformStyle: 'preserve-3d' }}
             >
                 <CardSide className='rotate-y-0 overflow-hidden bg-[#5C739B]'>
-                    <img src={card.coverImg} draggable="false" />
+                    <img src={coverImg} draggable="false" />
                     <div className='text-center font-gowun -mt-2 text-sm'>
-                        {card.title}
+                        {keywordsString}
                     </div>
                 </CardSide>
                 <CardSide className='rotate-y-180 overflow-hidden' >
@@ -51,12 +59,12 @@ const FlippableCard = ({ index, zIndex, handleDragEnd, card }) => {
                             {/* 카드 설명 */}
                             <img src={star}></img>
                             <div className='font-gowun text-[#CBD5E1] px-10 break-keep text-xs my-2'>
-                                {card.cardDescription}
+                                {cardDescription}
                             </div>
                             <img src={star}></img>
                             {/* 질문 */}
                             <div className='font-gowun text-sm px-12 break-keep mt-10'>
-                                {card.question}
+                                {question}
                             </div>
                         </div>
                     </div>

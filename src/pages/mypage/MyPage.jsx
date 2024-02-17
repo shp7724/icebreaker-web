@@ -6,7 +6,7 @@ import { useRef, useState, useEffect } from "react";
 import QRCodeBottomSheet from "./QRCodeBottomSheet";
 import Cookies from 'js-cookie';
 import { useNavigate } from "react-router-dom";
-import baseUrl from '../../baseUrl';
+import { baseUrl, clientUrl } from '../../baseUrl';
 
 const MyPage = () => {
     const badgesRef = useRef();
@@ -48,7 +48,10 @@ const MyPage = () => {
             meetUpId = await peakMeetUpId();
         }
         setMeetUpId(meetUpId);
-        setQrCodeUrl(`${baseUrl}/loading?meetUpId=${meetUpId}`);
+        // https://icebreaker.wafflestudio.com
+        // /loading?meetUpId=290b72b2-7f6d-420d-a0b2-1c64b03b3c9e::41&isHost=false
+        // https://icebreaker.wafflestudio.com/api/v1/meet/meet?meetUpId=290b72b2-7f6d-420d-a0b2-1c64b03b3c9e::41
+        setQrCodeUrl(`${clientUrl}/loading?meetUpId=${meetUpId}&isHost=false`);
     }
 
     const makeMeetupRequest = async () => {
@@ -93,7 +96,7 @@ const MyPage = () => {
                 if (response.headers.get('content-length') === '0' || !response.body) {
                     // setIsFriendJoined(false);
                 } else {
-                    navigate(`/loading?meetUpId=${meetUpId}`);
+                    navigate(`/loading?meetUpId=${meetUpId}&isHost=true`);
                     clearInterval(interval);
                 }
             }

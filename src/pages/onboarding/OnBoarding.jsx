@@ -4,7 +4,7 @@ import Input from "./Input";
 import Cookies from 'js-cookie';
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import baseUrl from '../../baseUrl';
+import { baseUrl } from '../../baseUrl';
 const OnBoarding = () => {
   const navigate = useNavigate();
   const [stage, setStage] = useState('NAME');

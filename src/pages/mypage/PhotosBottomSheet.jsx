@@ -4,7 +4,7 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 import nextArrow from "../../../static/next_arrow.svg";
 import prevArrow from "../../../static/prev_arrow.svg";
-import baseURL from "../../baseUrl";
+import { baseUrl } from "../../baseUrl";
 import ImageUploadButton from "./ImageUploadButton";
 import Cookies from 'js-cookie';
 
@@ -25,7 +25,7 @@ const PhotosBottomSheet = forwardRef(function PhotosBottomSheet({ badgesRef, han
     const transitionToDone = useCallback(async () => {
         await controls.start('done');
         setIsDone(true);
-        await uploadSelectedImages(selectedImages, `${baseURL}/api/v1/upload`);
+        await uploadSelectedImages(selectedImages, `${baseUrl}/api/v1/upload`);
         await handlePhotoUploadFinished();
     }, [controls, selectedImages, handlePhotoUploadFinished]);
 
