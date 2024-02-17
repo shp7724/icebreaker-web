@@ -12,8 +12,7 @@ function useQuery() {
 const LoadingPage = () => {
     const query = useQuery();
     const meetUpId = query.get('meetUpId');
-
-    const [isFriendJoined, setIsFriendJoined] = useState(false)
+    const [streamJsonData, setStreamJsonData] = useState([]);
 
     useEffect(() => {
         const accessToken = Cookies.get('accessToken');
@@ -22,29 +21,6 @@ const LoadingPage = () => {
             return;
         }
     }, []);
-
-    useEffect(() => {
-        const interval = setInterval(async () => {
-            const accessToken = Cookies.get('accessToken');
-            const response = await fetch(
-                `${baseUrl}/api/v1/meet/meet`,
-                {
-                    headers: { 'Authorization': `Bearer ${accessToken}` },
-                }
-            );
-
-            if (response && response.status === 200) {
-                if (response.headers.get('content-length') === '0' || !response.body) {
-                    // Handle empty response body
-                    setIsFriendJoined(false);
-                } else {
-                    setIsFriendJoined(true);
-                    clearInterval(interval);
-                }
-            }
-        }, 500);
-        return () => clearInterval(interval);
-    }, [meetUpId]);
 
     const lottieRef = useRef(null);
 
@@ -66,6 +42,41 @@ const LoadingPage = () => {
         });
     }, [lottieRef]);
 
+    useEffect(() => {
+        const streamData = async () => {
+            const response = await fetch(`${baseUrl}/api/v1/icebreaking/generate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/stream+json',
+                    'Authorization': `Bearer ${Cookies.get('accessToken')}`
+                },
+                body: JSON.stringify({
+                    'id': meetUpId
+                })
+            });
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+
+            return reader.read().then(function processText({ done, value }) {
+                if (done) {
+                    console.log('Stream complete');
+                    return;
+                }
+
+                const chunk = decoder.decode(value, { stream: true });
+                try {
+                    const json = JSON.parse(chunk);
+                    setStreamJsonData(prevData => [...prevData, json]);
+                } catch (error) {
+                    console.error('Error parsing JSON:', error);
+                }
+                return reader.read().then(processText);
+            });
+        };
+
+        streamData().catch(console.error);
+    }, [meetUpId]);
+
     return (
         <div className='flex items-center justify-center h-full'>
             <div>
@@ -76,6 +87,15 @@ const LoadingPage = () => {
 
                 <div className='' >
                     <Lottie ref={lottieRef} options={defaultOptions} height={300} width={300} isClickToPauseDisabled />
+                </div>
+
+                <div>
+                    {streamJsonData.map((data, index) => (
+                        <div key={index}>
+                            {data}
+                        </div>
+                    ))
+                    }
                 </div>
             </div>
         </div>
