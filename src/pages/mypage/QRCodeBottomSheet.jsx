@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import logo from '../../../static/friend_circle.svg';
 import PropTypes from 'prop-types';
+import { QRCode } from "react-qr-code";
 
 const QRCodeBottomSheet = ({ qrCodeUrl }) => {
     const controls = useAnimation();
@@ -36,7 +37,7 @@ const QRCodeBottomSheet = ({ qrCodeUrl }) => {
         setIsExpanded(!isExpanded);
     };
 
-    const transition = { type: 'spring', stiffness: 80, damping: 15 };
+    const transition = { type: 'spring', stiffness: 130, damping: 20 };
 
     return (
         <motion.div
@@ -56,7 +57,13 @@ const QRCodeBottomSheet = ({ qrCodeUrl }) => {
                     <img src={logo} alt="Logo" className="h-16" />
                     <h1 className="text-slate-500 text-xl font-bold">친구를 만날까요?</h1>
                     <motion.div variants={qrCodeVariants} transition={transition}>
-                        <img src={qrCodeUrl} alt="QR Code" className="h-36 w-36 mt-8" />
+                        <QRCode
+                            size={144}
+                            style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                            value={qrCodeUrl}
+                            className="mt-8"
+                            viewBox={`0 0 144 144`}
+                        />
                     </motion.div>
                 </div>
             </motion.div>
