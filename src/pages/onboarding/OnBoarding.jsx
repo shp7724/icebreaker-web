@@ -45,7 +45,7 @@ const OnBoarding = () => {
   return (
     <div className="">
       <div>
-        <div className='h-[20px]'></div>
+        <div className='h-[80px]'></div>
         <div className="mb-[12px]">
           <BotChatBox text="이름을 알려주세요!" />
         </div>

@@ -22,11 +22,11 @@ const FlippableCard = ({ index, zIndex, handleDragEnd, card }) => {
         handleDragEnd(index);
     }
 
-    const coverImg = allCardsCover[card.cardNo];
+    const coverImg = allCardsCover[card.cardNo - 1];
     const question = card.question;
-    const cardDescription = allCardsDescriptions[card.cardNo];
+    const cardDescription = allCardsDescriptions[card.cardNo - 1];
     const keywordsString = card.keywords.map((keyword, index) => {
-        return `#${keyword}`;
+        return `${keyword}`;
     }).join(' ');
 
     return (

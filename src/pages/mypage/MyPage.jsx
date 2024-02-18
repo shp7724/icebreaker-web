@@ -125,10 +125,6 @@ const MyPage = () => {
                 <button className="inline-flex items-center justify-center px-1 active:scale-90 transition-all active:bg-slate-200 rounded-2xl">
                     <img src={resetIcon} />
                 </button>
-                <button onClick={() => {
-                    setQrCodeUrl('https://developers.line.biz/assets/img/richmenu-template-guide-07.9ef1ba08.png')
-                }}>Set QR Code</button>
-
             </div>
             <PhotosBottomSheet badgesRef={badgesRef} ref={photosBottomSheetRef} handlePhotoUploadFinished={handlePhotoUploadFinished} />
             {qrCodeUrl && (

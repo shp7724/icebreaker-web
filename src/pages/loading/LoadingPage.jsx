@@ -64,7 +64,7 @@ const LoadingPage = () => {
             const chunk = decoder.decode(value, { stream: true });
             try {
                 const json = JSON.parse(chunk);
-                setStreamJsonData(prevData => [...prevData, json]);
+                setStreamJsonData(json);
             } catch (error) {
                 console.error('Error parsing JSON:', error);
             }

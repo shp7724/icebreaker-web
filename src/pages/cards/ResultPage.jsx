@@ -57,13 +57,15 @@ const ResultPage = () => {
         streamData();
     }, [streamData]);
 
+    console.log(streamJsonData);
+
     return (
         <div className='flex justify-center items-center flex-col h-full select-none'>
             <div className='text-slate-500 font-semibold mb-16 text-xl'>
                 두 분의 친구 카드가 도착했어요
             </div>
             <div className='grid'>
-                {streamJsonData && streamJsonData.result.map((card, i) => (
+                {streamJsonData && 'result' in streamJsonData && streamJsonData.result.map((card, i) => (
                     <div key={card.id} style={{ gridColumn: 1, gridRow: 1, zIndex: zIndices[i] }}>
                         <FlippableCard
                             index={i}
